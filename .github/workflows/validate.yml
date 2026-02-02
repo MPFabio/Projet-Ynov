@@ -1,4 +1,4 @@
-name: Validate
+name: CI - Validate
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   terraform:
-    name: Terraform validate
+    name: Terraform
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -37,3 +37,20 @@ jobs:
             kubectl apply -f "$f" --dry-run=client -o yaml > /dev/null || exit 1
           done
           echo "k8s manifests OK"
+
+  ansible:
+    name: Ansible syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install Ansible
+        run: pip install ansible
+      - name: Ansible playbook syntax check
+        run: |
+          cd ansible
+          ansible-playbook playbooks/configure-nodes.yml --syntax-check
+          ansible-playbook playbooks/deploy-app.yml --syntax-check

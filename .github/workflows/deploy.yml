@@ -1,0 +1,85 @@
+# CD - Déploiement manuel (workflow_dispatch)
+# Secrets requis : GCP_PROJECT_ID, GCP_SA_KEY (compte de service JSON)
+# Optionnel : TFSTATE_BUCKET pour backend GCS
+name: CD - Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      terraform_apply:
+        description: "Exécuter Terraform apply (infra GCP/GKE)"
+        required: false
+        default: false
+        type: boolean
+      k8s_apply:
+        description: "Exécuter kubectl apply (manifests k8s)"
+        required: false
+        default: true
+        type: boolean
+
+env:
+  TF_VAR_project_name: projet-ynov
+  TF_VAR_region: europe-west1
+
+jobs:
+  deploy-terraform:
+    name: Terraform
+    if: github.event.inputs.terraform_apply == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: terraform
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.0"
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Terraform init
+        run: |
+          if [ -n "${{ secrets.TFSTATE_BUCKET }}" ]; then
+            terraform init -backend-config="bucket=${{ secrets.TFSTATE_BUCKET }}"
+          else
+            terraform init -backend=false
+          fi
+
+      - name: Terraform plan
+        run: terraform plan -no-color -out=tfplan -var="project_id=${{ secrets.GCP_PROJECT_ID }}"
+
+      - name: Terraform apply
+        run: terraform apply -auto-approve tfplan
+
+  deploy-k8s:
+    name: Kubernetes
+    if: github.event.inputs.k8s_apply == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: Get GKE credentials
+        run: |
+          gcloud container clusters get-credentials projet-ynov-gke \
+            --region europe-west1 \
+            --project ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: kubectl apply
+        run: kubectl apply -f k8s/ -R
