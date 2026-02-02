@@ -1,8 +1,9 @@
-# Terraform - Infra GCP / GKE
+# Terraform - Cluster Kubernetes (GKE) sur GCP
 
-Déploie sur GCP :
-- Un VPC et un subnet
-- Un cluster GKE (Google Kubernetes Engine) avec node pool et autoscaling
+Déploie sur GCP un **cluster Kubernetes managé (GKE)** :
+- **VPC** + **subnet** (réseau dédié, plages pods/services pour GKE)
+- **Cluster GKE** `projet-ynov-gke` (le cluster Kubernetes)
+- **Node pool** avec autoscaling (nœuds du cluster)
 
 ## Prérequis
 

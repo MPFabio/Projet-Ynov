@@ -1,3 +1,8 @@
+# Projet-Ynov - Infra GCP
+# Déploie un cluster Kubernetes managé sur GCP (GKE = Google Kubernetes Engine) :
+# - VPC + subnet (réseau dédié)
+# - 1 cluster GKE (projet-ynov-gke)
+# - 1 node pool avec autoscaling (nœuds du cluster)
 terraform {
   required_version = ">= 1.0"
   required_providers {
@@ -13,7 +18,7 @@ provider "google" {
   region  = var.region
 }
 
-# VPC
+# VPC (réseau pour le cluster GKE)
 resource "google_compute_network" "vpc" {
   name                    = "${var.project_name}-vpc"
   auto_create_subnetworks = false
@@ -36,7 +41,7 @@ resource "google_compute_subnetwork" "subnet" {
   }
 }
 
-# GKE cluster
+# Cluster Kubernetes managé sur GCP (GKE)
 resource "google_container_cluster" "gke" {
   name     = "${var.project_name}-gke"
   location = var.region
