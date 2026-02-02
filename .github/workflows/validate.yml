@@ -6,10 +6,15 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  TF_VAR_project_id: kura-devops
+
 jobs:
   terraform:
     name: Terraform
     runs-on: ubuntu-latest
+    env:
+      TF_VAR_project_id: kura-devops
     defaults:
       run:
         working-directory: terraform
@@ -37,7 +42,7 @@ jobs:
           sudo mv kubectl /usr/local/bin/
       - name: Lint k8s (kubectl apply dry-run)
         run: |
-          for f in k8s/*.yaml; do
+          for f in k8s/namespace.yaml k8s/configmap.yaml k8s/deployment.yaml k8s/service.yaml; do
             kubectl apply -f "$f" --dry-run=client -o yaml > /dev/null || exit 1
           done
           echo "k8s manifests OK"
@@ -53,8 +58,10 @@ jobs:
           python-version: "3.11"
       - name: Install Ansible
         run: pip install ansible
+      - name: Install Ansible collection kubernetes.core
+        run: ansible-galaxy collection install kubernetes.core
       - name: Ansible playbook syntax check
         run: |
           cd ansible
-          ansible-playbook playbooks/configure-nodes.yml --syntax-check
+          ansible-playbook playbooks/configure-nodes.yml --syntax-check -i inventory/gcp.yml
           ansible-playbook playbooks/deploy-app.yml --syntax-check

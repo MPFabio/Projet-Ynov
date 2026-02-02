@@ -21,8 +21,8 @@ Aucun secret requis.
 
 | Secret | Description |
 |--------|-------------|
-| `GCP_PROJECT_ID` | ID du projet GCP |
+| `GCP_PROJECT_ID` | ID du projet GCP (ex. `kura-devops`) |
 | `GCP_SA_KEY` | Contenu JSON du compte de service GCP (clé) |
 | `TFSTATE_BUCKET` | (Optionnel) Nom du bucket GCS pour le state Terraform |
 
-Sans ces secrets, le workflow CD ne peut pas s’exécuter correctement.
+Sans ces secrets, le workflow CD ne peut pas s’exécuter correctement. Pour ce repo, configurer `GCP_PROJECT_ID` = `kura-devops`.

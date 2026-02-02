@@ -1,6 +1,6 @@
-project_id   = "votre-project-gcp"
-project_name = "projet-ynov"
-region       = "europe-west1"
-environment  = "dev"
-node_count   = 2
+project_id     = "kura-devops"
+project_name   = "projet-ynov"
+region         = "europe-west1"
+environment    = "dev"
+node_count     = 2
 node_max_count = 5

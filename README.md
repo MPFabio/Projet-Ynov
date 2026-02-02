@@ -23,9 +23,9 @@ Repo de test pour **ModulOps** : Terraform (GCP / GKE), Ansible et Kubernetes.
 1. **Terraform** — Créer l’infra GCP / GKE  
    ```bash
    cd terraform
-   cp terraform.tfvars.example terraform.tfvars  # éditer project_id
+   # terraform.tfvars déjà configuré avec kura-devops
    terraform init && terraform plan && terraform apply
-   gcloud container clusters get-credentials projet-ynov-gke --region europe-west1 --project VOTRE_PROJECT_ID
+   gcloud container clusters get-credentials projet-ynov-gke --region europe-west1 --project kura-devops
    ```
 
 2. **Kubernetes** — Déployer l’app de test  
@@ -34,7 +34,7 @@ Repo de test pour **ModulOps** : Terraform (GCP / GKE), Ansible et Kubernetes.
    kubectl get all -n projet-ynov
    ```
 
-4. **Ansible** — Config nœuds ou déploiement (voir `ansible/README.md`).
+3. **Ansible** — Config nœuds ou déploiement (voir `ansible/README.md`).
 
 ## Lien avec ModulOps
 

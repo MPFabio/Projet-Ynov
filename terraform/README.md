@@ -13,8 +13,8 @@ Déploie sur GCP :
 ## Usage
 
 ```bash
-cp terraform.tfvars.example terraform.tfvars
-# Éditer terraform.tfvars avec votre project_id GCP
+# terraform.tfvars est déjà configuré avec le projet kura-devops
+# Sinon : cp terraform.tfvars.example terraform.tfvars
 
 terraform init
 terraform plan
@@ -24,7 +24,7 @@ terraform apply
 Récupérer les identifiants kubectl :
 
 ```bash
-gcloud container clusters get-credentials projet-ynov-gke --region europe-west1 --project VOTRE_PROJECT_ID
+gcloud container clusters get-credentials projet-ynov-gke --region europe-west1 --project kura-devops
 ```
 
 ## Backend (optionnel)
