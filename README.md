@@ -9,6 +9,7 @@ Repo de test pour **ModulOps** : Terraform (GCP / GKE), Ansible et Kubernetes.
 | **terraform/** | Infra GCP : VPC, subnet, cluster GKE, node pool avec autoscaling |
 | **ansible/**   | Playbooks (deploy-app, configure-nodes), inventaire, ansible.cfg |
 | **k8s/**       | Manifests : namespace, ConfigMap, Deployment (nginx), Service |
+| **scripts/**   | `setup-gcp.sh` / `setup-gcp.ps1` : génère `terraform.tfvars` avec le project ID GCP (gcloud) |
 
 ## Prérequis
 
@@ -33,7 +34,7 @@ Repo de test pour **ModulOps** : Terraform (GCP / GKE), Ansible et Kubernetes.
    kubectl get all -n projet-ynov
    ```
 
-3. **Ansible** — Config nœuds ou déploiement (voir `ansible/README.md`).
+4. **Ansible** — Config nœuds ou déploiement (voir `ansible/README.md`).
 
 ## Lien avec ModulOps
 
