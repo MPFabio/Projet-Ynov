@@ -36,16 +36,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Install kubectl
+      - name: Install kubeconform
         run: |
-          curl -sLO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x kubectl
-          sudo mv kubectl /usr/local/bin/
-      - name: Lint k8s (kubectl apply dry-run)
+          curl -sL https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz | tar xz -C /usr/local/bin
+      - name: Lint k8s (kubeconform, sans cluster)
         run: |
-          for f in k8s/namespace.yaml k8s/configmap.yaml k8s/deployment.yaml k8s/service.yaml; do
-            kubectl apply -f "$f" --dry-run=client --validate=false -o yaml > /dev/null || exit 1
-          done
+          kubeconform -summary -output text k8s/namespace.yaml k8s/configmap.yaml k8s/deployment.yaml k8s/service.yaml
           echo "k8s manifests OK"
 
   ansible:
