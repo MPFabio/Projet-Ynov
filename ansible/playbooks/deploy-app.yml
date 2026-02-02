@@ -1,0 +1,35 @@
+---
+# Playbook : déploiement d'une app sur les nœuds / dans le cluster
+# À lancer après que Terraform ait créé le cluster GKE
+- name: Deploy app (préparation)
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Vérifier kubectl
+      command: which kubectl
+      register: kubectl_check
+      ignore_errors: true
+    - name: Fail si kubectl absent
+      fail:
+        msg: "kubectl non trouvé. Installez-le et configurez le contexte GKE."
+      when: kubectl_check.rc != 0
+
+- name: Appliquer les manifests Kubernetes
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Appliquer les manifests k8s
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', item) | from_yaml }}"
+      loop:
+        - "../k8s/namespace.yaml"
+        - "../k8s/configmap.yaml"
+        - "../k8s/deployment.yaml"
+        - "../k8s/service.yaml"
+      when: false  # désactivé par défaut : utiliser kubectl apply -f k8s/ en pratique
+    - name: Info
+      debug:
+        msg: "Appliquez les manifests manuellement : kubectl apply -f ../k8s/"

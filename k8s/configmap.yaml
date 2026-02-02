@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: projet-ynov
+  labels:
+    app: test-app
+data:
+  ENV: "dev"
+  LOG_LEVEL: "info"
+  APP_NAME: "projet-ynov"

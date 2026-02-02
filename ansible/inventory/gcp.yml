@@ -1,0 +1,15 @@
+# Inventaire pour GCP / GKE
+# Adapter les IP ou utiliser dynamic inventory (gcp_compute)
+all:
+  children:
+    gke_nodes:
+      hosts:
+        # Remplacer par les IP des nœuds GKE ou utiliser gcp_compute
+        # node1:
+        #   ansible_host: 10.0.0.x
+      vars:
+        ansible_user: ubuntu
+        ansible_ssh_private_key_file: ~/.ssh/id_rsa
+
+  vars:
+    ansible_python_interpreter: /usr/bin/python3

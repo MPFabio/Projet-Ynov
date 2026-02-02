@@ -1,0 +1,27 @@
+---
+# Playbook : configuration de base des nœuds (si VM / nodes accessibles en SSH)
+- name: Configuration de base
+  hosts: all
+  become: true
+  tasks:
+    - name: Mettre à jour le cache apt
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+      when: ansible_os_family == "Debian"
+
+    - name: Installer paquets utiles
+      apt:
+        name:
+          - curl
+          - ca-certificates
+          - gnupg
+          - lsb-release
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Créer répertoire app
+      file:
+        path: /opt/app
+        state: directory
+        mode: "0755"
