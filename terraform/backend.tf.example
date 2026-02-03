@@ -1,7 +1,0 @@
-# Renommer en backend.tf et adapter le bucket GCS
-terraform {
-  backend "gcs" {
-    bucket = "VOTRE-BUCKET-TFSTATE"
-    prefix = "projet-ynov/terraform/state"
-  }
-}

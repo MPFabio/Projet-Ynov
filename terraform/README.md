@@ -49,11 +49,11 @@ Récupérer les identifiants kubectl :
 gcloud container clusters get-credentials projet-ynov-gke --region europe-west1 --project kura-devops
 ```
 
-## Backend (optionnel)
+## Backend GCS (tfstate)
 
-Pour stocker le state dans un bucket GCS :
+Le state est stocké dans le bucket GCS **kura-ynov** (fichier `backend.tf`).
 
-```bash
-cp backend.tf.example backend.tf
-# Créer un bucket GCS et mettre son nom dans backend.tf
-```
+- **Prérequis** : le bucket doit exister ; le compte utilisé (gcloud ou `GOOGLE_APPLICATION_CREDENTIALS`) doit avoir les droits **Storage Object Admin** (ou **Storage Admin**) sur ce bucket.
+- Au premier `terraform init`, Terraform crée l’objet state sous le préfixe `projet-ynov/terraform/state`.
+
+Pour utiliser un autre bucket, adapter `backend.tf` (ou s’inspirer de `backend.tf.example`).
