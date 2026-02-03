@@ -34,3 +34,4 @@ output "project_id" {
   description = "Project ID GCP"
   value       = var.project_id
 }
+

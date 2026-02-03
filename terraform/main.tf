@@ -56,10 +56,9 @@ resource "google_compute_subnetwork" "subnet" {
 
 # Cluster Kubernetes managé sur GCP (GKE)
 resource "google_container_cluster" "gke" {
-  name     = "${var.project_name}-gke"
-  location = var.region
-  depends_on = [google_project_service.container, google_compute_subnetwork.subnet]
-
+  name                     = "${var.project_name}-gke"
+  location                 = var.region
+  depends_on               = [google_project_service.container, google_compute_subnetwork.subnet]
   remove_default_node_pool = true
   initial_node_count       = 1
 

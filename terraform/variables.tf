@@ -50,3 +50,4 @@ variable "node_disk_size_gb" {
   type        = number
   default     = 50
 }
+
