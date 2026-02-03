@@ -107,6 +107,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
+          install_components: gke-gcloud-auth-plugin
 
       - name: Get GKE credentials
         run: |
@@ -114,5 +115,8 @@ jobs:
             --region europe-west1 \
             --project ${{ secrets.GCP_PROJECT_ID }}
 
-      - name: kubectl apply
+      - name: kubectl apply (1re passe – namespace + ressources)
+        run: kubectl apply -f k8s/ -R
+
+      - name: kubectl apply (2e passe – rattrape les ressources en attente du namespace)
         run: kubectl apply -f k8s/ -R
