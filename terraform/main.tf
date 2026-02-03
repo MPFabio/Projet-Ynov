@@ -18,11 +18,24 @@ provider "google" {
   region  = var.region
 }
 
+# Activer les APIs GCP requises (évite l'erreur 403 "API has not been used or is disabled")
+resource "google_project_service" "compute" {
+  project = var.project_id
+  service = "compute.googleapis.com"
+}
+
+resource "google_project_service" "container" {
+  project            = var.project_id
+  service            = "container.googleapis.com"
+  disable_on_destroy = false
+}
+
 # VPC (réseau pour le cluster GKE)
 resource "google_compute_network" "vpc" {
   name                    = "${var.project_name}-vpc"
   auto_create_subnetworks = false
   routing_mode            = "GLOBAL"
+  depends_on              = [google_project_service.compute]
 }
 
 # Subnet
@@ -45,6 +58,7 @@ resource "google_compute_subnetwork" "subnet" {
 resource "google_container_cluster" "gke" {
   name     = "${var.project_name}-gke"
   location = var.region
+  depends_on = [google_project_service.container, google_compute_subnetwork.subnet]
 
   remove_default_node_pool = true
   initial_node_count       = 1

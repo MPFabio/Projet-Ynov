@@ -76,7 +76,9 @@ jobs:
 
   deploy-k8s:
     name: Kubernetes
-    if: github.event.inputs.k8s_apply == 'true'
+    needs: deploy-terraform
+    # Quand les deux sont cochés : attend Terraform puis déploie k8s. Quand seul k8s : Terraform est skipped, on lance quand même k8s.
+    if: always() && github.event.inputs.k8s_apply == 'true' && (needs.deploy-terraform.result == 'success' || needs.deploy-terraform.result == 'skipped')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
