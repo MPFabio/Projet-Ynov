@@ -1,6 +1,7 @@
 # CD - Déploiement manuel (workflow_dispatch)
 # Secrets requis : GCP_PROJECT_ID, GCP_SA_KEY (compte de service JSON)
 # Optionnel : TFSTATE_BUCKET pour backend GCS
+# À configurer dans : Settings → Secrets and variables → Actions (pas disponibles depuis un fork)
 name: CD - Deploy
 
 on:
@@ -35,6 +36,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Vérifier les secrets GCP
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+        run: |
+          if [ -z "$GCP_SA_KEY" ] || [ "$GCP_SA_KEY" = "" ]; then
+            echo "::error::GCP_SA_KEY manquant. Ajoutez la clé JSON du compte de service dans Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          if [ -z "$GCP_PROJECT_ID" ] || [ "$GCP_PROJECT_ID" = "" ]; then
+            echo "::error::GCP_PROJECT_ID manquant. Ajoutez l'ID du projet GCP dans Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          echo "Secrets GCP présents."
+
       - uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: "1.5.0"
@@ -64,6 +80,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Vérifier les secrets GCP
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+        run: |
+          if [ -z "$GCP_SA_KEY" ] || [ "$GCP_SA_KEY" = "" ]; then
+            echo "::error::GCP_SA_KEY manquant. Ajoutez la clé JSON du compte de service dans Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          if [ -z "$GCP_PROJECT_ID" ] || [ "$GCP_PROJECT_ID" = "" ]; then
+            echo "::error::GCP_PROJECT_ID manquant. Ajoutez l'ID du projet GCP dans Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          echo "Secrets GCP présents."
 
       - name: Authenticate to GCP
         uses: google-github-actions/auth@v2
