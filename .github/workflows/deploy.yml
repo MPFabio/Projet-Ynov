@@ -63,9 +63,9 @@ jobs:
       - name: Terraform init
         run: |
           if [ -n "${{ secrets.TFSTATE_BUCKET }}" ]; then
-            terraform init -backend-config="bucket=${{ secrets.TFSTATE_BUCKET }}"
+            terraform init -reconfigure -backend-config="bucket=${{ secrets.TFSTATE_BUCKET }}"
           else
-            terraform init -backend=false
+            terraform init -reconfigure
           fi
 
       - name: Terraform plan
