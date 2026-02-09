@@ -8,6 +8,7 @@ Repo de test pour **ModulOps** : Terraform (GCP / GKE), Ansible et Kubernetes.
 |-------------|---------|
 | **terraform/** | Infra GCP : VPC, subnet, cluster GKE, node pool avec autoscaling |
 | **ansible/**   | Playbooks (deploy-app, configure-nodes), inventaire, ansible.cfg |
+| **awx/**       | Docker Compose pour AWX (Postgres, Memcached, AWX) — voir `awx/README.md` |
 | **k8s/**       | Manifests : namespace, ConfigMap, Deployment (nginx), Service |
 | **scripts/**   | `setup-gcp.sh` / `setup-gcp.ps1` : génère `terraform.tfvars` avec le project ID GCP (gcloud) |
 
@@ -35,6 +36,12 @@ Repo de test pour **ModulOps** : Terraform (GCP / GKE), Ansible et Kubernetes.
    ```
 
 3. **Ansible** — Config nœuds ou déploiement (voir `ansible/README.md`).
+
+4. **AWX** — Lancer l’interface AWX en local pour exécuter les playbooks (voir `awx/README.md`) :
+   ```bash
+   cd awx && docker compose up -d
+   # http://localhost:8052 (admin / password)
+   ```
 
 ## Lien avec ModulOps
 

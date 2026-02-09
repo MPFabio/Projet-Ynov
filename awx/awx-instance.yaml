@@ -1,0 +1,16 @@
+# Instance AWX (AWX Operator) — à déployer sur GKE ou tout cluster Kubernetes
+apiVersion: awx.ansible.com/v1beta1
+kind: AWX
+metadata:
+  name: awx
+  namespace: awx
+spec:
+  service_type: LoadBalancer
+  session_cookie_secure: "False"
+  csrf_cookie_secure: "False"
+  extra_settings:
+    - setting: CSRF_TRUSTED_ORIGINS
+      value:
+        - "http://localhost:8052"
+        - "http://127.0.0.1:8052"
+        - "http://host.docker.internal:8052"

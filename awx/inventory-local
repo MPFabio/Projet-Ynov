@@ -1,0 +1,15 @@
+# Inventaire minimal pour AWX en local (awx-without-k8s)
+# Un seul nœud : la machine locale.
+# Prérequis : ajouter dans le fichier hosts de la machine :
+#   127.0.0.1   awx-1.demo.io
+# Windows : C:\Windows\System32\drivers\etc\hosts (en admin)
+# Linux/Mac : /etc/hosts
+
+[all:vars]
+ansible_python_interpreter=auto
+ansible_connection=local
+# Déploiement en root ou avec sudo
+ansible_become=yes
+
+[awx]
+awx-1.demo.io
