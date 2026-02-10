@@ -5,6 +5,8 @@
 .terraform.lock.hcl
 *.tfvars
 !*.tfvars.example
+.ansible_ssh_private_key
+terraform/.ansible_ssh_private_key
 
 # Ansible
 *.retry

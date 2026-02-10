@@ -61,6 +61,48 @@ Si tu préfères **Docker sans Kubernetes** : le projet [awx-without-k8s](https:
 
 ---
 
+## Premiers pas dans l’interface AWX (jamais utilisé ?)
+
+Oui, la première fois tu crées **à la main** dans l’interface : un **inventaire**, puis un **Job Template**. Ensuite tu peux lancer les jobs depuis AWX ou depuis Kura.
+
+### 1. Vérifier le Projet
+
+- Menu **Ressources** → **Projets**. Tu dois avoir un projet (ex. **Projet-Ynov**) avec l’URL Git et la branche `main`.
+- Clique sur le projet → bouton **Actualiser** (↻) si besoin pour que AWX récupère les playbooks. Attends que le statut soit vert (succès).
+- **Répertoire Playbook** : si ton formulaire de projet affiche ce champ, mets `ansible/playbooks`. Sinon, laisse vide et indique le **chemin complet** du playbook dans le Job Template (ex. `ansible/playbooks/configure-nodes.yml`).
+
+### 2. Créer un inventaire
+
+Un inventaire = la liste des machines sur lesquelles Ansible va jouer les playbooks.
+
+- Menu **Ressources** → **Inventaires** → **Ajouter** → **Inventaire**.
+- **Nom** : par ex. `GCP` ou `Mes serveurs`.
+- **Organisation** : `Default`. Enregistrer.
+- Ensuite, ouvre cet inventaire → onglet **Hôtes** → **Ajouter**.
+  - Soit tu ajoutes des **hôtes à la main** : nom (ex. `node-1`), adresse (IP ou hostname). Tu peux en ajouter plusieurs.
+  - Soit tu utilises un **script d’inventaire dynamique** (ex. `gcp_compute`) : dans ce cas tu crées d’abord une credential GCP et tu l’associes à l’inventaire (Source : « Inventaire géré par Ansible Tower » → Source : « Google Compute Engine », credential GCP). Pour débuter, 1–2 hôtes en manuel suffisent.
+
+### 3. Créer un Job Template
+
+C’est le « job » que tu lanceras (et que Kura pourra lister/lancer).
+
+- Menu **Ressources** → **Modèles** (Job Templates) → **Ajouter** → **Modèle de job**.
+- **Nom** : ex. `Configurer les nœuds` ou `Deploy app`.
+- **Projet** : choisis **Projet-Ynov** (ton projet Git).
+- **Playbook** : saisis le chemin complet depuis la racine du repo, ex. `ansible/playbooks/configure-nodes.yml` ou `ansible/playbooks/deploy-app.yml` (si le projet n’a pas de « Répertoire Playbook », c’est la seule façon de cibler le bon dossier).
+- **Inventaire** : choisis l’inventaire que tu viens de créer (ex. `GCP`).
+- **Identifiants** : si ton playbook se connecte en SSH aux hôtes, ajoute une credential de type **Machine** (utilisateur + clé SSH ou mot de passe). Sinon tu peux laisser vide pour tester.
+- **Enregistrer**.
+
+### 4. Lancer un job
+
+- Dans **Modèles**, clique sur le nom du Job Template → bouton **Lancer** (ou **Launch**). Le job s’exécute ; tu vois les logs en direct.
+- Une fois au moins un Job Template créé, **Kura** (si configuré avec l’URL et les identifiants AWX) pourra afficher ces jobs et les lancer depuis son interface.
+
+Récap : **Projet** (déjà fait) → **Inventaire** (hôtes) → **Job Template** (projet + playbook + inventaire) → lancer. Détails Kura dans **KURA-AWX.md**.
+
+---
+
 ## Références
 
 - [AWX](https://github.com/ansible/awx) — projet officiel

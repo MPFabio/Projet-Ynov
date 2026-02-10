@@ -1,0 +1,2 @@
+# Optionnel : pour get_ansible_ssh_key.py --source secret
+google-cloud-secret-manager>=2.16.0

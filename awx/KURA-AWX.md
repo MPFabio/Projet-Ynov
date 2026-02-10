@@ -22,7 +22,8 @@ Enregistrer, puis cliquer sur **Actualiser** (↻) sur le projet pour que AWX r�
 ### Ensuite dans AWX
 
 - **Inventaires** → Ajouter un inventaire (ex. `GCP`), ajouter les hôtes ou un script d’inventaire.
-- **Modèles (Job Templates)** → Ajouter → choisir le **Projet** (Projet-Ynov), l’**Inventaire**, le **Playbook** (`configure-nodes.yml` ou `deploy-app.yml`), et une **Credential** si besoin. Enregistrer.
+- **Credential Machine (SSH)** : pour que les jobs Ansible se connectent aux nœuds, utilise la clé générée par Terraform. Récupère la clé privée avec `python scripts/get_ansible_ssh_key.py --source file` (ou `--source secret` si tu as configuré Secret Manager). Dans AWX : **Ressources** → **Informations d'identification** → **Ajouter** → type **Machine** → Nom d’utilisateur **ansible**, Clé privée = sortie du script. Voir `terraform/README.md` (section Clé SSH Ansible).
+- **Modèles (Job Templates)** → Ajouter → choisir le **Projet** (Projet-Ynov), l’**Inventaire**, le **Playbook** (`configure-nodes.yml` ou `deploy-app.yml`), et la **Credential** Machine ci-dessus. Enregistrer.
 
 Une fois au moins un Job Template créé, AWX exposera des jobs que Kura pourra lister et lancer.
 

@@ -51,3 +51,15 @@ variable "node_disk_size_gb" {
   default     = 50
 }
 
+# Clé SSH pour Ansible / AWX (générée par Terraform, déployée sur les nœuds GCP)
+variable "ssh_username" {
+  description = "Utilisateur SSH utilisé par Ansible sur les nœuds"
+  type        = string
+  default     = "ansible"
+}
+
+variable "additional_ssh_public_keys" {
+  description = "Clés SSH publiques additionnelles (format: user:ssh-rsa AAAA...). Concaténées aux métadonnées projet."
+  type        = string
+  default     = ""
+}
