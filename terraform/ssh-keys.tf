@@ -40,3 +40,22 @@ resource "google_secret_manager_secret_version" "ansible_ssh_private_key" {
   secret      = google_secret_manager_secret.ansible_ssh_private_key.id
   secret_data = tls_private_key.ansible.private_key_openssh
 }
+
+# Pare-feu : autoriser SSH (port 22) vers les nœuds / VM portant les tags du projet
+resource "google_compute_firewall" "allow_ssh_ansible" {
+  name    = "${var.project_name}-allow-ssh-ansible"
+  network = google_compute_network.vpc.self_link
+
+  direction = "INGRESS"
+  priority  = 1000
+
+  target_tags = ["gke-node", var.project_name]
+  source_ranges = var.ssh_source_ranges
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+
+  description = "Autorise SSH (22) depuis ssh_source_ranges vers les nœuds/VM taggés pour Ansible/AWX."
+}

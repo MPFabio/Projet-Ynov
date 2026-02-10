@@ -63,3 +63,9 @@ variable "additional_ssh_public_keys" {
   type        = string
   default     = ""
 }
+
+variable "ssh_source_ranges" {
+  description = "Plages CIDR autorisées pour SSH (port 22) vers les nœuds (ex: 0.0.0.0/0 en dev, ou sous-réseau GKE uniquement)."
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}
