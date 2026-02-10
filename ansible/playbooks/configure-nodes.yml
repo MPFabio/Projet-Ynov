@@ -22,6 +22,6 @@
 
     - name: Créer répertoire app
       file:
-        path: /opt/app
+        path: /home/ansible/app
         state: directory
         mode: "0755"
