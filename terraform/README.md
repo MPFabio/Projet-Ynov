@@ -18,7 +18,12 @@ Terraform ne les active pas (nécessite le rôle Service Usage Admin). À faire 
 
 ```bash
 # Remplacer MY_PROJECT_ID par l'ID du projet GCP
-gcloud services enable compute.googleapis.com container.googleapis.com secretmanager.googleapis.com --project=MY_PROJECT_ID
+gcloud services enable \
+  compute.googleapis.com \
+  container.googleapis.com \
+  secretmanager.googleapis.com \
+  cloudresourcemanager.googleapis.com \
+  --project=MY_PROJECT_ID
 ```
 
 Ou dans la console : [APIs & Services → Library](https://console.cloud.google.com/apis/library) → activer **Compute Engine API** et **Kubernetes Engine API**.

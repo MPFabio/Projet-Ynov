@@ -49,7 +49,7 @@ resource "google_compute_firewall" "allow_ssh_ansible" {
   direction = "INGRESS"
   priority  = 1000
 
-  target_tags = ["gke-node", var.project_name]
+  target_tags   = ["gke-node", var.project_name]
   source_ranges = var.ssh_source_ranges
 
   allow {
